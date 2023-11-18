@@ -1,0 +1,39 @@
+#!/bin/bash
+
+REPO="devops-static-web"
+
+echo "==================="
+
+apt-get update
+
+echo "el servidor esta actualizado"
+
+if  dpkg -l | grep -q git ;
+then
+      echo "ya esta instalado"
+else
+      echo  "instalando paquete"
+      apt-get install  git -y
+fi
+
+if  dpkg -l | grep -q apache2 ;
+then
+      echo "ya esta instalado"
+else
+      echo  "instalando paquete"
+      apt-get install apache2 -y
+      systemctl start apache2
+      systemctl enable apache2 
+fi
+
+if [ -d "$REPO" ] ;
+then
+   echo "la carpeta $REPO existe"
+else
+    git clone -b devops-mariobros https://github.com/roxsross/$REPO.git
+fi
+
+echo "instalandoweb"
+sleep 1
+
+cp -r $REPO/* /var/www/html
